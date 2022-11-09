@@ -15,7 +15,7 @@ from django.http import JsonResponse
 import requests
 from rest_framework.authtoken.models import Token
 from django.views.decorators.csrf import csrf_exempt
-
+from .authentication import decode_access_token,create_access_token
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from .models import User, PhoneOTP
 from .serializers import (CreateUserSerialzier, 
@@ -123,8 +123,8 @@ def check_otp(self, request):
                     
                     serializer.is_valid(raise_exception = True)
                     user = serializer.save()
-                    token = Token.objects.create(user=user)
-                    return Response({"token": token.key})
+                    token = create_access_token(user.id)
+                    return Response({"token": token})
                     
                     
                 else:

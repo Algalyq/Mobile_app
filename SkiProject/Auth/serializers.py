@@ -19,7 +19,7 @@ class CreateUserSerialzier(serializers.HyperlinkedModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'phone', 'name', 'first_login', 'standard', 'score' )
+        fields = ('id', 'phone' )
 
 
     def validate(self, attrs):
