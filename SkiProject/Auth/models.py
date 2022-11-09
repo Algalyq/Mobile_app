@@ -1,4 +1,3 @@
-
 from __future__ import unicode_literals
 from django.db import models
 from django.db import models
@@ -16,11 +15,9 @@ class CustomUserManager(BaseUserManager):
 	def create_user(self, phone, password=None):
 		if not phone:
 			raise ValueError('User must have a phone number')
-		if not password:
-			raise ValueError('User must have a password')
 
 		user = self.model(phone=phone)
-		user.set_password(password)
+		user.set_password('')
 		user.is_staff=False
 		user.is_admin=False
 		user.is_active=True

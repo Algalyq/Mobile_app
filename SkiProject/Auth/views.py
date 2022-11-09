@@ -12,7 +12,7 @@ import requests
 from rest_framework.authtoken.models import Token
 from django.views.decorators.csrf import csrf_exempt
 
-from .utils import send_otp,post_otp
+from .utils import send_otp,post_otp, check_otp
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from .models import User, PhoneOTP
 from .serializers import (CreateUserSerialzier, 
@@ -25,7 +25,9 @@ class Test(APIView):
         otp = self.request.data.get('otp')
         
         if phone and otp: 
-            return Response({"status":True})
+            serializer = check_otp(self, request)
+            
+            return Response(serializer.data)
         elif phone:
             serializer = post_otp(self, request)
             return Response(serializer.data)
@@ -39,44 +41,6 @@ class Test(APIView):
         #      # Here asap will be twilio (sms message)
         #         otp
         # return Response({"status": phone})
-
-
-class ValidateOTP(APIView):
-    def post(self, *args, **kwargs):
-        phone = self.request.data.get('phone',False)
-        otp_sent = self.request.data.get('otp',False)
-
-        if phone and otp_sent:
-            old = PhoneOTP.objects.filter(phone__iexact=phone)
-
-            if old.exists():
-                old = old.first()
-                otp = old.otp
-
-                if str(otp) == str(otp_sent):
-                    old.logged = True
-                    old.save()
-                    return Response({
-                        'status' : True, 
-                        'detail' : 'OTP matched, kindly proceed to save password'
-                    })
-                else:
-                    return Response({
-                        'status' : False, 
-                        'detail' : 'OTP incorrect, please try again'
-                    })
-
-            else:
-                return Response({
-                    'status' : False,
-                    'detail' : 'Incorrect Phone number. Kindly request a new otp with this number'
-                })
-
-        else:
-            return Response({
-                'status' : 'False',
-                'detail' : 'Either phone or otp was not recieved in Post request'
-            })
 
 
 

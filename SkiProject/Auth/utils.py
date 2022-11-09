@@ -103,3 +103,44 @@ def post_otp(self,request):
                 'status': False,
                 'detail':'No phone number has been received. Kindly do the POST request.'
                 })    
+
+def check_otp(self, request):
+        phone = self.request.data.get('phone',False)
+        otp_sent = self.request.data.get('otp',False)
+
+        if phone and otp_sent:
+            old = PhoneOTP.objects.filter(phone__iexact=phone)
+
+            if old.exists():
+                old = old.first()
+                otp = old.otp
+
+                if str(otp) == str(otp_sent):
+                    old.logged = True
+                    old.save()
+                    temp_data = {'phone':phone}
+                    serializer = CreateUserSerialzier(data=temp_data)
+                    
+                    serializer.is_valid(raise_exception = True)
+                    user = serializer.save()
+                    token = Token.objects.create(user=user)
+                    return Response({"token": token.key})
+                    
+                    
+                else:
+                    return Response({
+                        'status' : False, 
+                        'detail' : 'OTP incorrect, please try again'
+                    })
+
+            else:
+                return Response({
+                    'status' : False,
+                    'detail' : 'Incorrect Phone number. Kindly request a new otp with this number'
+                })
+
+        else:
+            return Response({
+                'status' : 'False',
+                'detail' : 'Either phone or otp was not recieved in Post request'
+            })
