@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Auth',
+    "Rent_app",
     'rest_framework.authtoken',
     'corsheaders'
 ]
