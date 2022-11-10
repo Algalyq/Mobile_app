@@ -16,6 +16,7 @@ from .utils import send_otp,post_otp, check_otp
 from .authentication import create_access_token,decode_access_token
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from .models import User, PhoneOTP
+from rest_framework.authentication import get_authorization_header
 from .serializers import (CreateUserSerialzier, 
                         UserSerializer, SerOTP)
 
@@ -43,6 +44,20 @@ class Test(APIView):
         #         otp
         # return Response({"status": phone})
 
+
+class UserAPIView(APIView):
+    def get(self, request):
+        auth = get_authorization_header(request).split()
+
+        if auth and len(auth) == 2:
+            token = auth[1].decode('utf-8')
+            id = decode_access_token(token)
+
+            user = User.objects.filter(pk=id).first()
+
+            return Response(UserSerializer(user).data)
+
+        raise AuthenticationFailed('unauthenticated')
 
 
 
