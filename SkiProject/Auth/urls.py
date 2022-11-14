@@ -7,5 +7,5 @@ urlpatterns = [
 	# path('register/', Register.as_view()),
 	path('test/', Test.as_view()),
 	path('login', LoginAPIView.as_view()),
-    path('user', UserAPIView.as_view()),
+	path('user/', UserAPIView.as_view())
 ]

@@ -12,6 +12,10 @@ admin.site.register(PhoneOTP)
 
 User = get_user_model()
 class UserAdmin(admin.ModelAdmin):
+    
+       
+    class Meta:
+        verbose_name_plural = "User"
     list_display = ('name', 'phone',  'standard',  'is_admin')
     list_filter = ('standard','is_staff','is_active' ,'is_admin', )
     fieldsets = (
@@ -25,12 +29,11 @@ class UserAdmin(admin.ModelAdmin):
             'fields': ('phone', 'password1', 'password2')}
         ),
     )
-
-
+    
     search_fields = ('phone','name')
     ordering = ('phone','name')
     filter_horizontal = ()
-
+ 
 
 
 admin.site.register(User, UserAdmin)

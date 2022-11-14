@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from django.http import JsonResponse
 import requests
+from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.exceptions import APIException
@@ -20,8 +21,9 @@ from rest_framework.authentication import get_authorization_header
 from .serializers import (CreateUserSerialzier, 
                         UserSerializer, SerOTP)
 
-
 class Test(APIView):
+    
+ 
     def post(self,request):
         phone = self.request.data.get('phone')
         otp = self.request.data.get('otp')
@@ -33,6 +35,9 @@ class Test(APIView):
         elif phone:
             serializer = post_otp(self, request)
             return Response(serializer.data)
+
+        
+    
         # if phone: 
         #     phone_number = str(phone)
         #     user = User.objects.filter(phone=phone_number)
@@ -52,7 +57,7 @@ class UserAPIView(APIView):
         if auth and len(auth) == 2:
             token = auth[1].decode('utf-8')
             id = decode_access_token(token)
-
+            print(id)
             user = User.objects.filter(pk=id).first()
 
             return Response(UserSerializer(user).data)
