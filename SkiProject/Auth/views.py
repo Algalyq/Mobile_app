@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from django.http import JsonResponse
 import requests
+from rest_framework import exceptions
 from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
 from django.views.decorators.csrf import csrf_exempt
@@ -50,19 +51,6 @@ class Test(APIView):
         # return Response({"status": phone})
 
 
-class UserAPIView(APIView):
-    def get(self, request):
-        auth = get_authorization_header(request).split()
-
-        if auth and len(auth) == 2:
-            token = auth[1].decode('utf-8')
-            id = decode_access_token(token)
-            print(id)
-            user = User.objects.filter(pk=id).first()
-
-            return Response(UserSerializer(user).data)
-
-        raise AuthenticationFailed('unauthenticated')
 
 
 

@@ -1,14 +1,29 @@
 from rest_framework import serializers
-from .models import Uniforms, SeasonTicket
+from .models import Boot_directory, Ski_directory, Subsc_directory, Resort_directory
 
 
-class SeasonSerializer(serializers.ModelSerializer):
+class BootsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SeasonTicket
+        model = Boot_directory
         fields = ('__all__')
-        
-class UniformSerializer(serializers.ModelSerializer):
+
+
+class SkiSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Uniforms
+        model = Ski_directory
         fields = ('__all__')
+
+class SubscSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = Subsc_directory
+        fields = ('__all__')
+
+class ResortSerializer(serializers.ModelSerializer):
+    ski = SkiSerializer(many=True)
+    subsc = SubscSerializer(many=True)
+    boot = BootsSerializer(many=True) 
+    class Meta:
+        model = Resort_directory
+        fields = ['resort_name','resort_address','ski','subsc','boot']
+
         

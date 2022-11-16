@@ -16,11 +16,11 @@ class UserAdmin(admin.ModelAdmin):
        
     class Meta:
         verbose_name_plural = "User"
-    list_display = ('name', 'phone',  'standard',  'is_admin')
+    list_display = ('user_name', 'phone',  'standard',  'is_admin')
     list_filter = ('standard','is_staff','is_active' ,'is_admin', )
     fieldsets = (
         (None, {'fields': ('phone', 'password')}),
-        ('Personal info', {'fields': ('name', 'standard','score',)}),
+        ('Personal info', {'fields': ('user_name', 'standard','score',)}),
         ('Permissions', {'fields': ('is_admin','is_staff','is_active')}),
     )
     add_fieldsets = (
@@ -30,8 +30,8 @@ class UserAdmin(admin.ModelAdmin):
         ),
     )
     
-    search_fields = ('phone','name')
-    ordering = ('phone','name')
+    search_fields = ('phone','user_name')
+    ordering = ('phone','user_name')
     filter_horizontal = ()
  
 
